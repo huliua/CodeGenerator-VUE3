@@ -1,4 +1,5 @@
-# testVue3
+# CodeGenerator-VUE3
+基于vue3+ElementUI实现的代码生成器，可以维护生成的文件路径，以及具体的代码模板。
 
 This template should help get you started developing with Vue 3 in Vite.
 
