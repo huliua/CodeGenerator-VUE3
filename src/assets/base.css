@@ -1,0 +1,10 @@
+/**自定义dialog中footer样式。默认显示在最下面**/
+.el-dialog__footer {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+.el-dialog__body {
+    overflow: scroll;
+    height: 75%;
+}
