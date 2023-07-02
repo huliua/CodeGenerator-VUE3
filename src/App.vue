@@ -1,34 +1,27 @@
 <script setup>
-import { ref, onMounted, shallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { Delete, MagicStick, Sunny, Moon } from '@element-plus/icons-vue'
-import InfiniteCardList from '@/components/InfiniteCardList/index.vue';
-import AddDialog from '@/components/AddDialog/index.vue';
+import CardList from '@/components/CardList/index.vue'
+import AddDialog from '@/components/AddDialog/index.vue'
 import { useDark, useToggle } from '@vueuse/core'
 
-const mainClass = ref('common-theme')
-
-// 从localstorage中获取主题
-const theme = window.localStorage.getItem('theme')
-if (theme) {
-  mainClass.value = theme;
-}
-
 // 数据主键字段
-const primaryKey = "index";
-// 数据加载默认页码为8
-const pageSize = ref(50);
+const primaryKey = 'index'
 // 卡片组件按钮列表
-const buttonList = ref([{
-  name: '编辑',
-  type: 'primary',
-  icon: shallowRef(MagicStick),
-  funcName: 'doEdit'
-}, {
-  name: '删除',
-  type: 'danger',
-  icon: shallowRef(Delete),
-  funcName: 'doDelete'
-}]);
+const buttonList = ref([
+  {
+    name: '编辑',
+    type: 'primary',
+    icon: shallowRef(MagicStick),
+    funcName: 'doEdit'
+  },
+  {
+    name: '删除',
+    type: 'danger',
+    icon: shallowRef(Delete),
+    funcName: 'doDelete'
+  }
+])
 
 /**
  * 处理按钮点击事件
@@ -37,11 +30,11 @@ const buttonList = ref([{
  * @param {String} param.primaryKey 对应的主键数据值
  */
 const buttonClick = (param) => {
-  console.log(param);
+  console.log(param)
 }
 
 // 卡片列表组件实例
-const infiniteCardList = ref();
+const cardList = ref()
 /**
  * 加载表单数据
  * @param {Object} param 加载数据必要参数
@@ -51,35 +44,25 @@ const infiniteCardList = ref();
  */
 const loadData = (param) => {
   // 加载数据中
-  infiniteCardList.value.changeIsLoading(true);
-  for (let index = 1; index <= pageSize.value; index++) {
-    infiniteCardList.value.datas.push({
+  cardList.value.changeIsLoading(true)
+  cardList.value.datas = []
+  for (let index = 1; index <= param.pageSize; index++) {
+    cardList.value.datas.push({
       index: (param.pageNumber - 1) * param.pageSize + index,
-      title: (param.pageNumber - 1) * param.pageSize + index,
-    });
+      title: (param.pageNumber - 1) * param.pageSize + index
+    })
   }
-
-  // 加载数据成功后，页码加1
-  infiniteCardList.value.pageNumberUp();
   // 加载数据完毕
   setTimeout(function () {
-    infiniteCardList.value.changeIsLoading(false);
-  }, 2000);
+    cardList.value.changeIsLoading(false)
+  }, 2000)
 }
 
 // 添加模板
-const addDialog = ref(null);
+const addDialog = ref(null)
 const showAdd = function () {
-  addDialog.value.showDialog();
+  addDialog.value.showDialog()
 }
-
-onMounted(() => {
-  // 进入页面后加载数据
-  loadData({
-    pageNumber: 1,
-    pageSize: pageSize.value
-  });
-});
 
 // 白天/夜间模式切换
 const isDark = useDark()
@@ -87,16 +70,19 @@ const toggleDark = useToggle(isDark)
 </script>
 
 <template>
-  <el-container :class="mainClass + ' fullscreen'">
+  <el-container class="fullscreen">
     <!-- 头部 -->
     <el-header> 生成只因 </el-header>
     <!-- 主体 -->
     <el-main>
-
       <!-- 按钮列表 -->
       <el-row>
         <el-button type="primary" @click="showAdd">新增模板</el-button>
-        <el-button @click="toggleDark()" :class="(isDark ? 'bg-color-blank' : 'bg-color-white') + ' my-switch-button'" round>
+        <el-button
+          @click="toggleDark()"
+          :class="(isDark ? 'bg-color-blank' : 'bg-color-white') + ' my-switch-button'"
+          round
+        >
           <div :class="!isDark ? 'my-switch-left my-switch-icon' : 'my-switch-icon'">
             <el-icon v-show="!isDark">
               <Sunny />
@@ -112,13 +98,17 @@ const toggleDark = useToggle(isDark)
 
       <el-row>
         <!-- 卡片展示列表 -->
-        <InfiniteCardList ref="infiniteCardList" :buttonList="buttonList" :primaryKey="primaryKey" :pageSize="pageSize"
-          @onLoadData="loadData" @onBtnClick="buttonClick">
-        </InfiniteCardList>
+        <CardList
+          ref="cardList"
+          :buttonList="buttonList"
+          :primaryKey="primaryKey"
+          @onLoadData="loadData"
+          @onBtnClick="buttonClick"
+        ></CardList>
       </el-row>
 
       <AddDialog :title="'新增模板'" ref="addDialog"></AddDialog>
-
+      <el-backtop :right="20" :bottom="50" />
     </el-main>
     <!-- 底部 -->
     <el-footer>Footer</el-footer>
@@ -168,6 +158,7 @@ const toggleDark = useToggle(isDark)
   width: 18px;
   height: 18px;
 }
+
 .my-switch-left {
   left: 10px;
 }

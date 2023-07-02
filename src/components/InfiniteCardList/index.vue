@@ -50,7 +50,7 @@ watch(isLoading, function (newValue) {
 })
 </script>
 <template>
-  <el-space class="mainContent" wrap :size="22" v-infinite-scroll="loadData" :infinite-scroll-disabled="isLoading">
+  <el-space class="mainContent" wrap :size="22" v-infinite-scroll="loadData" :infinite-scroll-disabled="isLoading" :infinite-scroll-distance="0">
     <el-card class="box-card" v-for="item in datas" :key="item[primaryKey]">
       <template #header>
         <div class="card-header">
