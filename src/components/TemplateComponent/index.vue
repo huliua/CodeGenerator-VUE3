@@ -1,5 +1,5 @@
 <template>
-    <el-row :gutter="80">
+    <el-row :gutter="40">
         <el-col :span="10">
             <FileTreeVue @onClick="fileTreeClick" />
         </el-col>

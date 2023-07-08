@@ -1,50 +1,13 @@
 <template>
     <el-form ref="formRef" :model="ruleForm" :rules="rules" label-width="120px" :size="'large'" status-icon>
-        <el-form-item label="Activity name" prop="name">
-            <el-input v-model="ruleForm.name" />
+        <el-form-item label="模板名称" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入模板名称"/>
         </el-form-item>
-        <el-form-item label="Activity zone" prop="region">
-            <el-select v-model="ruleForm.region" placeholder="Activity zone">
-                <el-option label="Zone one" value="shanghai" />
-                <el-option label="Zone two" value="beijing" />
-            </el-select>
+        <el-form-item label="模板描述" prop="description">
+            <el-input v-model="ruleForm.description" type="textarea" placeholder="请输入模板描述" />
         </el-form-item>
-        <el-form-item label="Activity time" required>
-            <el-col class="relative" :span="8">
-                <el-form-item prop="date1">
-                    <el-date-picker v-model="ruleForm.date1" type="date" label="Pick a date" placeholder="Pick a date"
-                        style="width: 100%" />
-                </el-form-item>
-            </el-col>
-            <el-col class="text-center" :span="8">
-                <span class="text-gray-500">-</span>
-            </el-col>
-            <el-col class="relative" :span="8">
-                <el-form-item prop="date2">
-                    <el-time-picker v-model="ruleForm.date2" label="Pick a time" placeholder="Pick a time"
-                        style="width: 100%" />
-                </el-form-item>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Instant delivery" prop="delivery">
-            <el-switch v-model="ruleForm.delivery" />
-        </el-form-item>
-        <el-form-item label="Activity type" prop="type">
-            <el-checkbox-group v-model="ruleForm.type">
-                <el-checkbox label="Online activities" name="type" />
-                <el-checkbox label="Promotion activities" name="type" />
-                <el-checkbox label="Offline activities" name="type" />
-                <el-checkbox label="Simple brand exposure" name="type" />
-            </el-checkbox-group>
-        </el-form-item>
-        <el-form-item label="Resources" prop="resource">
-            <el-radio-group v-model="ruleForm.resource">
-                <el-radio label="Sponsorship" />
-                <el-radio label="Venue" />
-            </el-radio-group>
-        </el-form-item>
-        <el-form-item label="Activity form" prop="desc">
-            <el-input v-model="ruleForm.desc" type="textarea" />
+        <el-form-item label="是否启用" prop="enable">
+            <el-switch v-model="ruleForm.enable" />
         </el-form-item>
     </el-form>
 </template>
@@ -54,31 +17,23 @@ import { ref, reactive, defineExpose, defineEmits } from 'vue'
 
 const ruleForm = reactive({
     name: '',
-    region: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
+    description: '',
+    enable: true
 });
 const rules = reactive({
-    date1: [
+    name: [
         {
-            type: 'date',
-            required: false,
-            message: 'Please pick a date',
-            trigger: 'change',
+            required: true,
+            message: '请输入模板名称',
+            trigger: 'blur',
         },
-    ],
-    date2: [
         {
-            type: 'date',
-            required: false,
-            message: 'Please pick a time',
-            trigger: 'change',
-        },
-    ],
+            min: 3,
+            max: 15,
+            message: '名称长度为3~15位字符！',
+            trigger: 'blur'
+        }
+    ]
 });
 
 const emit = defineEmits(['save-success']);
@@ -94,6 +49,9 @@ const saveData = function () {
         if (!valid) {
             return;
         }
+        // 执行保存
+
+        // 触发保存成功事件
         emit('save-success');
     })
 }
