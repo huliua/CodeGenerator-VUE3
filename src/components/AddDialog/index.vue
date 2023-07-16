@@ -3,18 +3,17 @@
     <el-steps :active="activeStep" align-center :process-status="processStatus" finish-status="success">
       <el-step title="Step 1" description="填写模板基本信息" />
       <el-step title="Step 2" description="设置生成模板" />
-      <el-step title="Step 3" description="设置完成"/>
+      <el-step title="Step 3" description="设置完成" />
     </el-steps>
-    <el-divider :borderStyle="'dashed'"/>
+    <el-divider :borderStyle="'dashed'" />
     <div class="mainContent">
-      <Step1 v-show="activeStep == 0" ref="step1Ref" @save-success="onSaveSuccess" />
-      <Step2 v-show="activeStep == 1" />
-      <el-result
-        v-show="activeStep == 2"
-        icon="success"
-        title="保存成功！"
-        sub-title="赶快试试用这个模板来生成代码吧！"
-      />
+      <div v-show="activeStep == 0">
+        <Step1 ref="step1Ref" @save-success="onSaveSuccess" />
+      </div>
+      <div v-show="activeStep == 1">
+        <Step2 />
+      </div>
+      <el-result v-show="activeStep == 2" icon="success" title="保存成功！" sub-title="赶快试试用这个模板来生成代码吧！" />
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -98,12 +97,12 @@ const showDialog = function () {
 }
 
 // 当前步骤改变时，触发当前状态的变化
-watch(activeStep, function(newValue) {
-    if (newValue == endStep.value) {
-        processStatus.value = 'success';
-    } else {
-        processStatus.value = 'process';
-    }
+watch(activeStep, function (newValue) {
+  if (newValue == endStep.value) {
+    processStatus.value = 'success';
+  } else {
+    processStatus.value = 'process';
+  }
 });
 
 defineExpose({
